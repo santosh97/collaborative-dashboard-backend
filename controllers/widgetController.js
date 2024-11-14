@@ -1,3 +1,10 @@
+'use strict';
+/*******
+ * widgetController.js: controller for widgets
+ * 
+ * 11/2024 Santosh Dubey
+ *
+ */
 const Widget = require('../models/Widget');
 const jwt = require('jsonwebtoken');
 
@@ -5,10 +12,11 @@ const jwt = require('jsonwebtoken');
 exports.createWidget = async (req, res) => {
   try {
     const { title, description, type } = req.body;
-    const widget = new Widget({ title, description, type, updatedBy: req.user.username });
+    const widget = new Widget({ title, description, type, updatedBy: req.user?.username||'defaultUser' });
     await widget.save();
     res.status(201).json(widget);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Failed to create widget', error });
   }
 };

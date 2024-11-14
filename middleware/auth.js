@@ -1,3 +1,11 @@
+'use strict';
+/*******
+ * auth.js: middleware for vaildation with jwt
+ * 
+ * 11/2024 Santosh Dubey
+ *
+ */
+
 const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {

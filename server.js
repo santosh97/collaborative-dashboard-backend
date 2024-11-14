@@ -16,7 +16,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(express.json());
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
 // app.use(cors("*"));
 // CORS configuration
 // const allowedOrigins = ['http://localhost:3000', 'https://collaborative-dashboard-bm7lll42v-santoshs-projects-5df5e859.vercel.app'];
