@@ -24,7 +24,7 @@ const io = new Server(server, {
 // Middleware
 app.use(express.json());
 // app.set('trust proxy', true);
-// app.use(cors("*"));
+app.use(cors());
 // CORS configuration
 // const allowedOrigins = ['http://localhost:3000', 'https://collaborative-dashboard-bm7lll42v-santoshs-projects-5df5e859.vercel.app'];
 // app.use(cors({
@@ -47,8 +47,7 @@ app.use('/api/', apiLimiter);
 
 // MongoDB Connection using environment variables
 mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+
 }).then(() => console.log('Connected to MongoDB')).catch(err => console.log(err));
 
 // Routes
