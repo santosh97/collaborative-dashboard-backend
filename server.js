@@ -16,8 +16,18 @@ const io = new Server(server, {
 
 // Middleware
 app.use(express.json());
-app.use(cors());
-
+// app.use(cors());
+// CORS configuration
+const allowedOrigins = ['http://localhost:3000', 'https://collaborative-dashboard-bm7lll42v-santoshs-projects-5df5e859.vercel.app'];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 // Rate limiting for API
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
