@@ -25,16 +25,22 @@ const io = new Server(server, {
 app.use(express.json());
 // app.set('trust proxy', true);
 // CORS configuration
-const allowedOrigins = ['https://collaborative-dashboard-bm7lll42v-santoshs-projects-5df5e859.vercel.app'];
+// Allow only the frontend origin
+const allowedOrigins = ['https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app'];
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, postman)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, // If cookies or credentials are used
 }));
+
 // Rate limiting for API
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
