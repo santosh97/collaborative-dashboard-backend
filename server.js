@@ -1,3 +1,10 @@
+'use strict';
+/*******
+ * server.js: entry point for app
+ * 
+ * 11/2024 Santosh Dubey
+ *
+ */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -11,7 +18,7 @@ const authenticateToken = require('./middleware/auth');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: '*'  }
+    cors: { origin: '*' }
 });
 
 // Middleware
@@ -31,17 +38,17 @@ app.use(express.json());
 // }));
 // Rate limiting for API
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  message: 'Too many requests, please try again later.'
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: 'Too many requests, please try again later.'
 });
 
 app.use('/api/', apiLimiter);
 
 // MongoDB Connection using environment variables
 mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB')).catch(err => console.log(err));
 
 // Routes
@@ -49,10 +56,10 @@ app.use('/api', widgetRoutes);
 
 // WebSocket handling
 io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
+    console.log('A user connected');
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
 });
 
 const PORT = process.env.PORT || 5000;
