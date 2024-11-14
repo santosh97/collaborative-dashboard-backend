@@ -11,7 +11,7 @@ const authenticateToken = require('./middleware/auth');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: process.env.SOCKET_URI , methods: ['GET', 'POST'] }
+  cors: { origin: '*'  }
 });
 
 // Middleware
