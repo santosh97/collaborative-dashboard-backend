@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 exports.createWidget = async (req, res) => {
     try {
         const { title, description, type } = req.body;
-        const widget = new Widget({ title, description, type, updatedBy: req.user.username || 'defaultUser' });
+        const widget = new Widget({ title, description, type, updatedBy: req.user?.username || 'defaultUser' });
         await widget.save();
         res.status(201).json(widget);
     } catch (error) {
