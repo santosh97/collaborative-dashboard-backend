@@ -26,7 +26,7 @@ app.use(express.json());
 // app.set('trust proxy', true);
 // CORS configuration
 // Allow only the frontend origin
-const allowedOrigins = ['https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app'];
+const allowedOrigins = ['https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app' ,'https://collaborative-dashboard-santoshs-projects-5df5e859.vercel.app','https://collaborative-dashboard-alpha.vercel.app'];
 
 app.use(cors({
     origin: function (origin, callback) {
