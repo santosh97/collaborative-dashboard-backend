@@ -12,21 +12,19 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
-const widgetRoutes = require('./routes/widgetRoutes');
 const authenticateToken = require('./middleware/auth');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: { origin: '*' }
-});
 
 // Middleware
 app.use(express.json());
-// app.set('trust proxy', true);
 // CORS configuration
-// Allow only the frontend origin
-const allowedOrigins = ['https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app' ,'https://collaborative-dashboard-santoshs-projects-5df5e859.vercel.app','https://collaborative-dashboard-alpha.vercel.app'];
+const allowedOrigins = [
+    'https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app',
+    'https://collaborative-dashboard-santoshs-projects-5df5e859.vercel.app',
+    'https://collaborative-dashboard-alpha.vercel.app'
+];
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -38,7 +36,7 @@ app.use(cors({
             return callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true, // If cookies or credentials are used
+    credentials: true, // Allow cookies or credentials to be included in requests
 }));
 
 // Rate limiting for API
@@ -51,18 +49,41 @@ const apiLimiter = rateLimit({
 app.use('/api/', apiLimiter);
 
 // MongoDB Connection using environment variables
-mongoose.connect(process.env.MONGO_URI, {
-
-}).then(() => console.log('Connected to MongoDB')).catch(err => console.log(err));
+mongoose.connect(process.env.MONGO_URI, {})
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.log(err));
 
 // Routes
-app.use('/api', widgetRoutes);
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/widgets', require('./routes/widgetRoutes'));
 
-// WebSocket handling
+// WebSocket handling with credentials
+const io = new Server(server, {
+    cors: {
+        origin: process.env.SOCKET_URI,  // Allow frontend origin
+        credentials: true,  // Allow credentials (cookies, authorization tokens)
+    },
+});
+
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('A user connected:', socket.id);
+
+    // Handle widget creation, update, and deletion events
+    socket.on('widget:create', (widget) => {
+        io.emit('widget:created', widget); // Broadcast to all clients
+    });
+
+    socket.on('widget:update', (updatedWidget) => {
+        console.log('widget:update:', updatedWidget);
+        io.emit('widget:updated', updatedWidget);
+    });
+
+    socket.on('widget:delete', (widgetId) => {
+        io.emit('widget:deleted', widgetId);
+    });
+
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        console.log('A user disconnected:', socket.id);
     });
 });
 

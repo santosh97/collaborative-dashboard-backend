@@ -12,11 +12,11 @@ const jwt = require('jsonwebtoken');
 exports.createWidget = async (req, res) => {
     try {
         const { title, description, type } = req.body;
-        const widget = new Widget({ title, description, type, updatedBy: req.user?.username || 'defaultUser' });
+        const widget = new Widget({ title, description, type, createdBY: req.user?.email || 'defaultUser' });
         await widget.save();
         res.status(201).json(widget);
     } catch (error) {
-        console.log('createWidget',error)
+        console.log('createWidget', error)
         res.status(500).json({ message: 'Failed to create widget', error: error.message });
     }
 };
@@ -27,7 +27,7 @@ exports.getWidgets = async (req, res) => {
         const widgets = await Widget.find();
         res.status(200).json(widgets);
     } catch (error) {
-        console.log('getWidgets',error)
+        console.log('getWidgets', error)
         res.status(500).json({ message: 'Failed to fetch widgets', error: error.message });
     }
 };
@@ -40,7 +40,7 @@ exports.updateWidget = async (req, res) => {
 
         res.status(200).json(widget);
     } catch (error) {
-        console.log('updateWidget',error)
+        console.log('updateWidget', error)
         res.status(500).json({ message: 'Failed to update widget', error: error.message });
     }
 };
@@ -53,7 +53,7 @@ exports.deleteWidget = async (req, res) => {
 
         res.status(204).send();
     } catch (error) {
-        console.log('deleteWidget',error)
+        console.log('deleteWidget', error)
         res.status(500).json({ message: 'Failed to delete widget', error: error.message });
     }
 };

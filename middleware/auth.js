@@ -10,18 +10,19 @@ const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
 
-    return next(); //temp patch  
-//   const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization']; // Get the Authorization header
 
-//   if (!token) {
-//     return res.status(401).json({ message: 'Access token required' });
-//   }
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Authorization header is required' });
+    }
 
-//   jwt.verify(token, 'your-secret-key', (err, user) => {
-//     if (err) return res.status(403).json({ message: 'Invalid token' });
-//     req.user = user;
-//     next();
-//   });
+    const token = authHeader.split(' ')[1]; // Extract the token from "Bearer <token>"
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ message: 'Invalid token' });
+        req.user = user;
+        next();
+    });
 };
 
 module.exports = authenticateToken;

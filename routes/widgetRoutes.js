@@ -11,9 +11,9 @@ const widgetController = require('../controllers/widgetController');
 const authenticateToken = require('../middleware/auth');
 
 // CRUD Routes for widgets
-router.get('/widgets', authenticateToken, widgetController.getWidgets);
-router.post('/widgets', authenticateToken, widgetController.createWidget);
-router.put('/widgets/:id', authenticateToken, widgetController.updateWidget);
-router.delete('/widgets/:id', authenticateToken, widgetController.deleteWidget);
+router.get('/', authenticateToken, widgetController.getWidgets);
+router.post('/', authenticateToken, widgetController.createWidget);
+router.put('/:id', authenticateToken, widgetController.updateWidget);
+router.delete('/:id', authenticateToken, widgetController.deleteWidget);
 
 module.exports = router;
