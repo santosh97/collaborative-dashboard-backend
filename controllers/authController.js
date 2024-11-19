@@ -5,7 +5,7 @@
  * 11/2024 Santosh Dubey
  *
  */
-const User = require('../models/user');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 // User Registration
