@@ -19,6 +19,8 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
+// Trust proxy header for identifying the user's IP address
+app.set('trust proxy', true);
 // CORS configuration
 const allowedOrigins = [
     'https://collaborative-dashboard-g9nehck0z-santoshs-projects-5df5e859.vercel.app',
